@@ -15,7 +15,9 @@ func main() {
 	fmt.Println("edades:", edades)
 
 	// Mapa con make
-	mapa := make(map[string]int)
+	mapa := make(map[string]int, 3) // 3 es la capacidad inicial del mapa, es opcional pero óptimo.
+	// Si se especifica la capacidad, se asigna el espacio en memoria correspondiente.
+	// Si no se especifica la capacidad, se asigna 0 por defecto.
 	mapa["Oscar"] = 5
 	mapa["Valeria"] = 7
 	mapa["Arturo"] = 6
@@ -28,6 +30,11 @@ func main() {
 
 	value_valeria := mapa["Valeria"]
 	fmt.Println("value_valeria:", value_valeria)
+
+	// Sin make
+	mapaSinMake := map[string]int{}
+	mapaSinMake["James"] = 16
+	fmt.Println("mapaSinMake:", mapaSinMake)
 
 	// Acceder a un valor que no existe
 	value_juan, exists := mapa["Juan"]
