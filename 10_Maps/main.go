@@ -14,6 +14,14 @@ func main() {
 	}
 	fmt.Println("edades:", edades)
 
+	// Usando var
+	var ages = map[string]int{
+		"Oscar":   35,
+		"Valeria": 32,
+		"Arturo":  35,
+	}
+	fmt.Println("ages:", ages)
+
 	// Mapa con make
 	mapa := make(map[string]int, 3) // 3 es la capacidad inicial del mapa, es opcional pero óptimo.
 	// Si se especifica la capacidad, se asigna el espacio en memoria correspondiente.
