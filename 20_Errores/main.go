@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 var ErrorDeCafe = fmt.Errorf("ya no hay café")
@@ -37,5 +38,13 @@ func main() {
 		}
 
 		fmt.Println()
+	}
+
+	// Manejo de errores.
+	myValue, err := strconv.Atoi("NaN")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(myValue)
 	}
 }
