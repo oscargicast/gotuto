@@ -16,7 +16,8 @@ func makeCafe(args int) error {
 		// Outer error: "se fue la luz: ..."
 		// Inner error: ErrorDeEnergia
 		// Así se crea una cadena de errores (error chain).
-		return fmt.Errorf("se fue la luz: %w", ErrorDeEnergia) // %w envuelve (wraps) el error original.
+		// Importante: %w envuelve (wraps) el error original.
+		return fmt.Errorf("se fue la luz: %w", ErrorDeEnergia)
 	}
 	return nil
 }
