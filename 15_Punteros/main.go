@@ -9,7 +9,7 @@ func potencia(num *int, n int) {
 	*num = int(math.Pow(float64(*num), float64(n)))
 }
 
-func invertir_array(array *[5]int) {
+func invertirArray(array *[5]int) {
 	i := 0
 	j := len(array) - 1
 	for i < j {
@@ -26,7 +26,7 @@ func invertir_array(array *[5]int) {
 	}
 }
 
-func invertir_slice(array []int) { // array es un slice
+func invertirSlice(array []int) { // array es un slice
 	// No necesita puntero, los slices son reference types
 	i := 0
 	j := len(array) - 1
@@ -77,21 +77,21 @@ func main() {
 	fmt.Println("Punteros de arrays")
 	fmt.Println("-----------------------------------------------")
 
-	num_list := [5]int{1, 2, 3, 4, 5}
-	invertir_array(&num_list)
-	fmt.Println(num_list)
+	numList := [5]int{1, 2, 3, 4, 5}
+	invertirArray(&numList)
+	fmt.Println(numList)
 
-	num_list2 := [5]int{10, 20, -10, 10, 40}
-	var puntero_num_list *[5]int = &num_list2
-	invertir_array(puntero_num_list)
-	fmt.Println(num_list2)
+	numList2 := [5]int{10, 20, -10, 10, 40}
+	var punteroNumList *[5]int = &numList2
+	invertirArray(punteroNumList)
+	fmt.Println(numList2)
 
 	fmt.Println("-----------------------------------------------")
 	fmt.Println("Punteros de slices")
 	fmt.Println("-----------------------------------------------")
 
 	slice := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	invertir_slice(slice)
+	invertirSlice(slice)
 	fmt.Println(slice)
 
 	fmt.Println("-----------------------------------------------")
@@ -103,16 +103,16 @@ func main() {
 	fmt.Println("p1:", p1)
 
 	// Crear un puntero a struct
-	var puntero_persona *Persona = &p1
-	fmt.Println("puntero_persona:", puntero_persona)
+	var punteroPersona *Persona = &p1
+	fmt.Println("punteroPersona:", punteroPersona)
 
 	// Go aplica automatic dereferencing para punteros a structs
 	// Puedes acceder a los campos directamente con el puntero
-	fmt.Println("puntero_persona.nombre:", puntero_persona.nombre) // No necesitas (*puntero_persona).nombre
-	fmt.Println("puntero_persona.edad:", (*puntero_persona).edad)  // Forma explícita
+	fmt.Println("punteroPersona.nombre:", punteroPersona.nombre) // No necesitas (*punteroPersona).nombre
+	fmt.Println("punteroPersona.edad:", (*punteroPersona).edad)  // Forma explícita
 
 	// Modificar valores a través del puntero
-	puntero_persona.edad = 30
+	punteroPersona.edad = 30
 	fmt.Println("p1 después de modificar con puntero:", p1) // p1 cambió porque el puntero apunta a él
 
 	// Crear un struct usando new (retorna un puntero)
