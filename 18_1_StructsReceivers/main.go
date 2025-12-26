@@ -28,7 +28,7 @@ type Product struct {
 	stock int
 }
 
-// Constructor que retorna un puntero a Product
+// NewProduct retorna un puntero a Product
 func NewProduct(name string, price float64, stock int) *Product {
 	return &Product{
 		name:  name,
@@ -42,13 +42,13 @@ func NewProduct(name string, price float64, stock int) *Product {
 
 // Método NO modificador (receiver por valor):
 // Se copia el valor que se pasa
-func (p Product) Info() string {
-	message := "Info: %s - $%.2f (%d disponibles)\n"
-	p.PrintAddressInMemory("p1.Info()")
+func (p Product) info() string {
+	message := "info: %s - $%.2f (%d disponibles)\n"
+	p.PrintAddressInMemory("p1.info()")
 	return fmt.Sprintf(message, p.name, p.price, p.stock)
 }
 
-// Método modificador (receiver por puntero):
+// UpdatePrice es un método modificador (receiver por puntero):
 func (p *Product) UpdatePrice(newPrice float64) {
 	p.price = newPrice
 	p.PrintAddressInMemory(fmt.Sprintf("p.UpdatePrice(%.2f)", newPrice))
@@ -63,8 +63,8 @@ func (p *Product) Sell(quantity int) error {
 	return nil
 }
 
-func (product *Product) PrintAddressInMemory(ref string) {
-	fmt.Printf("%-16s Memoria: %p\n", ref, product)
+func (p *Product) PrintAddressInMemory(ref string) {
+	fmt.Printf("%-16s Memoria: %p\n", ref, p)
 }
 
 func main() {
@@ -72,15 +72,17 @@ func main() {
 	p1.PrintAddressInMemory("p1")
 
 	// Receiver por valor
-	info := p1.Info()
+	info := p1.info()
 	fmt.Println(info)
 
 	// Receiver por puntero
 	p1.UpdatePrice(4999)
 	fmt.Println(p1)
-	fmt.Println(p1.Info())
+	fmt.Println(p1.info())
 
-	p1.Sell(2)
+	if err := p1.Sell(2); err != nil {
+		fmt.Println("error:", err)
+	}
 	fmt.Println(p1)
-	fmt.Println(p1.Info())
+	fmt.Println(p1.info())
 }
