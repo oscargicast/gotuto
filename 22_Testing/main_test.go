@@ -50,3 +50,28 @@ func TestMax(t *testing.T) {
 		}
 	}
 }
+
+func TestFibo(t *testing.T) {
+	tables := []struct {
+		n int
+		r int
+	}{
+		{0, 0},
+		{1, 1},
+		{2, 1},
+		{3, 2},
+		{4, 3},
+		{5, 5},
+		{6, 8},
+		{7, 13},
+		{8, 21},
+		{50, 12586269025},
+	}
+
+	for _, item := range tables {
+		fibo := Fibonacci(item.n)
+		if fibo != item.r {
+			t.Errorf("Error Fibo(%d): Got %d Expected %d", item.n, fibo, item.r)
+		}
+	}
+}
