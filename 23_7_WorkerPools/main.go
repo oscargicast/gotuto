@@ -2,6 +2,11 @@ package main
 
 import "fmt"
 
+type Result struct {
+	N   int
+	Fib int
+}
+
 /*
 	WORKER POOL (jobs/results)
 
@@ -18,7 +23,7 @@ import "fmt"
 	3) main encola los jobs con `jobs <- value`.
 	4) main hace `close(jobs)` para señalar “no hay más trabajo”. Esto permite que
 	   `for job := range jobs` termine en cada worker cuando el channel se drena.
-	5) Cada worker procesa el job y publica `results <- fib`.
+	5) Cada worker procesa el job y publica `results <- Result{N: job, Fib: fib}`.
 	6) main debe consumir los resultados; si no los drena, los workers pueden quedar
 	   bloqueados intentando enviar.
 
@@ -30,7 +35,7 @@ import "fmt"
 */
 
 func main() {
-	tasks := []int{2, 3, 4, 5, 7, 10, 12, 40}
+	tasks := []int{2, 3, 4, 5, 7, 10, 12, 40, 41, 1}
 	nWorkers := 3
 
 	// `jobs` es una cola de trabajo (work queue), no un semáforo.
@@ -44,7 +49,7 @@ func main() {
 	jobs := make(chan int, 3)
 	// jobs := make(chan int, len(tasks))
 
-	results := make(chan int, len(tasks))
+	results := make(chan Result, len(tasks))
 
 	for i := range nWorkers {
 		go Worker(i, jobs, results)
@@ -65,13 +70,15 @@ func main() {
 	// En este ejemplo NO es necesario close(results) porque:
 	// - no usamos `for range results` (que sí necesita un close para terminar), y
 	// - sabemos exactamente cuántos resultados leer.
-	for i, n := range tasks {
-		res := <-results
-		fmt.Printf("%d. F(%d) = %d\n", i, n, res)
+	// Importante: los resultados llegan en orden de finalización, no en el orden de `tasks`.
+	// Para no mezclar un "n" con el resultado de otro job, el worker manda (n, fib) juntos.
+	for range len(tasks) {
+		r := <-results
+		fmt.Printf("F(%d) = %d\n", r.N, r.Fib)
 	}
 }
 
-func Worker(id int, jobs <-chan int, results chan<- int) {
+func Worker(id int, jobs <-chan int, results chan<- Result) {
 	// Loop de trabajo: consume jobs hasta que `jobs` se cierra y se drena.
 	for job := range jobs {
 		fmt.Println("Starting")
@@ -80,7 +87,7 @@ func Worker(id int, jobs <-chan int, results chan<- int) {
 		fmt.Printf("Worker id: %d\tFib(%d): %d\n", id, job, fib)
 		fmt.Println("Finished")
 
-		results <- fib // Publica el resultado del job
+		results <- Result{N: job, Fib: fib} // Publica (job, resultado) juntos
 	}
 }
 
