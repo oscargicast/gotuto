@@ -27,6 +27,12 @@ func main() {
 	// Este channel se usa como semáforo para limitar concurrencia.
 	// Capacidad=2 => como máximo 2 goroutines “trabajando” al mismo tiempo.
 	//
+	// ¿Por qué un channel para el semáforo?
+	// Porque un buffered channel ya tiene la semántica de “capacidad finita + bloqueo”:
+	// - `c <- token` bloquea si el buffer está lleno => no hay permisos disponibles (acquire)
+	// - `<-c` drena un token y devuelve capacidad => libera un permiso (release)
+	// Eso genera backpressure de forma natural sin locks explícitos.
+	//
 	// Nota sobre "pasar por referencia": los channels en Go ya son reference types.
 	// Pasar `c chan T` copia solo un handle; todos apuntan al mismo channel subyacente.
 	c := make(chan int, 2)
